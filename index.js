@@ -1,10 +1,14 @@
 const express = require('express')
-const req = require('express/lib/request')
-const res = require('express/lib/response')
 const app = express()
 const port = 5000
+
+const req = require('express/lib/request')
+const res = require('express/lib/response')
+
 const bodyParser = require('body-parser')
 const { User } = require('./models/User')
+const config = require('./config/key') 
+
 
 //application/x-www-form-urlencoded (해당 형태의 데이터를 분석해서 가져올수 있도록 해줌)
 app.use(bodyParser.urlencoded({extended: true}))
@@ -14,14 +18,17 @@ app.use(bodyParser.json())
 
 
 const mongoose = require('mongoose')
-const MONGODB_URL = 'mongodb+srv://accguy:root@clusterda.0yaeq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
-mongoose.connect(MONGODB_URL)
+mongoose.connect(config.MONGODB_URL)
 .then(() => console.log('MongoDB Connected..........!!!'))
 .catch(err => console.log(err))
 
 
-app.get('/', (req, res) => res.send('ㅎㅇ'))
+app.get('/', (req, res) => res.send('This is main page.'))
+
+app.get('/mg', function(req, res){
+    res.send("This is mg page.")
+})
 
 app.post('/register', (req, res) => {
     //회원가입할때 필요한 정보들을 client에서 가져오면
